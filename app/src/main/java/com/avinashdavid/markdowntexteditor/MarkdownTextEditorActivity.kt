@@ -176,7 +176,7 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
 
     private fun toggleControlButton(button: ImageButton, isNowOn: Boolean) {
         if (isNowOn) {
-            button.setBackgroundColor(ContextCompat.getColor(this, fetchAccentColor(this)))
+            button.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
         } else {
             val attrs = intArrayOf(R.attr.selectableItemBackground)
             val typedArray = obtainStyledAttributes(attrs)
@@ -187,7 +187,7 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_STARTING_TEXT = "EXTRA_STARTING_TEXT"
+        const val EXTRA_STARTING_TEXT = "EXTRA_STARTING_TEXT"
 
         const val RESULT_EXTRA_FINAL_TEXT = "RESULT_EXTRA_FINAL_TEXT"
         const val RESULT_CODE_EDITING_COMPLETED = Activity.RESULT_OK
