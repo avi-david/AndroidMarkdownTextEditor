@@ -2,17 +2,21 @@ package com.avinashdavid.markdowntexteditor
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageButton
 import kotlinx.android.synthetic.main.activity_rich_text_editor.*
 import ru.noties.markwon.Markwon
 
 class MarkdownTextEditorActivity : AppCompatActivity() {
     private var currentNumberedListIndex = -1
+    private var isNumberedListOn = false
+    private var isBulletListOn = false
+    private var isQuoteOn = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rich_text_editor)
@@ -31,7 +35,13 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
                 val text = try { p0?.substring(start, start+count) } catch (e: Exception) {""}
                 if (text == "\n") {
-                    currentNumberedListIndex = -1
+                    if (isBulletListOn) {
+                        insertBulletListItem()
+                    } else if (isNumberedListOn) {
+                        insertNumberedListItem()
+                    } else if (isQuoteOn) {
+                        insertQuoteLine()
+                    }
                 }
             }
         })
@@ -42,7 +52,19 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
             etPrimaryEditor.addItalic()
         }
         btQuote.setOnClickListener {
-            etPrimaryEditor.addQuote()
+            if (!isQuoteOn) {
+                currentNumberedListIndex = -1
+                isQuoteOn = true
+                insertQuoteLine()
+            } else {
+                isQuoteOn = false
+                etPrimaryEditor.insertMarkdownNewline()
+            }
+            isNumberedListOn = false
+            toggleControlButton(btNumberedList, isNumberedListOn)
+            isBulletListOn = false
+            toggleControlButton(btBulletList, isBulletListOn)
+            toggleControlButton(btQuote, isQuoteOn)
         }
         btStrikethrough.setOnClickListener {
             etPrimaryEditor.addStrikethrough()
@@ -54,29 +76,63 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
             etPrimaryEditor.addLink()
         }
         btBulletList.setOnClickListener {
-            etPrimaryEditor.addBulletListItem()
+            if (!isBulletListOn) {
+                currentNumberedListIndex = -1
+                isBulletListOn = true
+                insertBulletListItem()
+            } else {
+                isBulletListOn = false
+                etPrimaryEditor.insertMarkdownNewline()
+            }
+            isNumberedListOn = false
+            toggleControlButton(btNumberedList, isNumberedListOn)
+            isQuoteOn = false
+            toggleControlButton(btQuote, isQuoteOn)
+            toggleControlButton(btBulletList, isBulletListOn)
         }
         btNumberedList.setOnClickListener {
-            if (currentNumberedListIndex == -1) {
-                currentNumberedListIndex = 1
+            if (!isNumberedListOn) {
+                isNumberedListOn = true
+                insertNumberedListItem()
             } else {
-                currentNumberedListIndex ++
+                isNumberedListOn = false
+                currentNumberedListIndex = -1
+                etPrimaryEditor.insertMarkdownNewline()
             }
-            etPrimaryEditor.addNumberedListItem(currentNumberedListIndex)
+            isBulletListOn = false
+            toggleControlButton(btBulletList, isBulletListOn)
+            isQuoteOn = false
+            toggleControlButton(btQuote, isQuoteOn)
+            toggleControlButton(btNumberedList, isNumberedListOn)
         }
-        etPrimaryEditor.setOnEditorActionListener { textView, actionId, keyEvent ->
-            if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
-                    || actionId == EditorInfo.IME_ACTION_DONE
-                    || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                    && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                if (currentNumberedListIndex == -1) {
-                    currentNumberedListIndex = 1
-                } else {
-                    currentNumberedListIndex ++
-                }
-                true
-            }
-            false
+    }
+
+    private fun insertBulletListItem() {
+        etPrimaryEditor.addBulletListItem()
+    }
+
+    private fun insertNumberedListItem() {
+        if (currentNumberedListIndex == -1) {
+            currentNumberedListIndex = 1
+        } else {
+            currentNumberedListIndex ++
+        }
+        etPrimaryEditor.addNumberedListItem(currentNumberedListIndex)
+    }
+
+    private fun insertQuoteLine() {
+        etPrimaryEditor.addQuote()
+    }
+
+    private fun toggleControlButton(button: ImageButton, isNowOn: Boolean) {
+        if (isNowOn) {
+            button.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+        } else {
+            val attrs = intArrayOf(R.attr.selectableItemBackground)
+            val typedArray = obtainStyledAttributes(attrs)
+            val backgroundResource = typedArray.getResourceId(0, 0)
+            button.setBackgroundResource(backgroundResource)
+            typedArray.recycle()
         }
     }
 }
@@ -174,3 +230,8 @@ private fun EditText.addNumberedListItem(numberValue: Int) {
 }
 
 private const val lineBreak = "\n\n"
+
+private fun EditText.insertMarkdownNewline() {
+    setText(text.toString() + lineBreak)
+    setSelection(this.text.length)
+}
