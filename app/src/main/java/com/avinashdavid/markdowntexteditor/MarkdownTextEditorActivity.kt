@@ -2,6 +2,7 @@ package com.avinashdavid.markdowntexteditor
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -17,6 +18,9 @@ import ru.noties.markwon.Markwon
 
 class MarkdownTextEditorActivity : AppCompatActivity() {
     private var startingText = ""
+    private var toolbarColor = 0
+    private var accentColor = 0
+
     private var currentNumberedListIndex = -1
     private var isNumberedListOn = false
     private var isBulletListOn = false
@@ -26,11 +30,16 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (intent.hasExtra(EXTRA_STARTING_TEXT)) {
             startingText = intent.getStringExtra(EXTRA_STARTING_TEXT)
+            toolbarColor = intent.getIntExtra(EXTRA_TOOLBAR_COLOR, R.color.colorPrimary)
+            accentColor = intent.getIntExtra(EXTRA_ACCENT_COLOR, R.color.colorAccent)
         }
         if (savedInstanceState?.containsKey(EXTRA_STARTING_TEXT) == true) {
             startingText = savedInstanceState.getString(EXTRA_STARTING_TEXT, "")
+            toolbarColor = savedInstanceState.getInt(EXTRA_TOOLBAR_COLOR, R.color.colorPrimary)
+            accentColor = savedInstanceState.getInt(EXTRA_ACCENT_COLOR, R.color.colorAccent)
         }
         setContentView(R.layout.activity_rich_text_editor)
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, toolbarColor)))
         etPrimaryEditor.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 p0?.let {
@@ -120,8 +129,27 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putString(EXTRA_STARTING_TEXT, etPrimaryEditor.text.toString())
+        outState?.apply {
+            putString(EXTRA_STARTING_TEXT, etPrimaryEditor.text.toString())
+            putInt(EXTRA_TOOLBAR_COLOR, toolbarColor)
+            putInt(EXTRA_ACCENT_COLOR, accentColor)
+        }
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_markdown_text_editor, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.miMarkdownTextEditorDone -> {
+                setResult(RESULT_CODE_EDITING_COMPLETED, Intent().putExtra(RESULT_EXTRA_FINAL_TEXT, etPrimaryEditor.text.toString()))
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun insertBulletListItem() {
@@ -143,7 +171,7 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
 
     private fun toggleControlButton(button: ImageButton, isNowOn: Boolean) {
         if (isNowOn) {
-            button.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+            button.setBackgroundColor(ContextCompat.getColor(this, accentColor))
         } else {
             val attrs = intArrayOf(R.attr.selectableItemBackground)
             val typedArray = obtainStyledAttributes(attrs)
@@ -153,40 +181,39 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_markdown_text_editor, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.miMarkdownTextEditorDone -> {
-                setResult(RESULT_CODE_EDITING_COMPLETED, Intent().putExtra(RESULT_EXTRA_FINAL_TEXT, etPrimaryEditor.text.toString()))
-                finish()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     companion object {
         private const val EXTRA_STARTING_TEXT = "EXTRA_STARTING_TEXT"
+        private const val EXTRA_TOOLBAR_COLOR = "EXTRA_TOOLBAR_COLOR"
+        private const val EXTRA_ACCENT_COLOR = "EXTRA_ACCENT_COLOR"
 
         const val RESULT_EXTRA_FINAL_TEXT = "RESULT_EXTRA_FINAL_TEXT"
         const val RESULT_CODE_EDITING_COMPLETED = Activity.RESULT_OK
         const val REQUEST_CODE_MARKDOWN_TEXT_EDITOR: Int = 62371
 
-        fun startForResult(activity: AppCompatActivity, startingMarkdownText: String? = null) {
+        fun startForResult(activity: AppCompatActivity, startingMarkdownText: String? = null, toolbarColor: Int? = null, accentColor: Int? = null) {
             activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
                 startingMarkdownText?.let {
                     putExtra(EXTRA_STARTING_TEXT, it)
                 }
+                toolbarColor?.let {
+                    putExtra(EXTRA_TOOLBAR_COLOR, it)
+                }
+                accentColor?.let {
+                    putExtra(EXTRA_ACCENT_COLOR, it)
+                }
             }, REQUEST_CODE_MARKDOWN_TEXT_EDITOR)
         }
 
-        fun startForResult(activity: Activity, startingMarkdownText: String? = null) {
+        fun startForResult(activity: Activity, startingMarkdownText: String? = null, toolbarColor: Int? = null, accentColor: Int? = null) {
             activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
                 startingMarkdownText?.let {
                     putExtra(EXTRA_STARTING_TEXT, it)
+                }
+                toolbarColor?.let {
+                    putExtra(EXTRA_TOOLBAR_COLOR, it)
+                }
+                accentColor?.let {
+                    putExtra(EXTRA_ACCENT_COLOR, it)
                 }
             }, REQUEST_CODE_MARKDOWN_TEXT_EDITOR)
         }

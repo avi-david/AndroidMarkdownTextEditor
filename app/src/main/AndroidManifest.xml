@@ -7,7 +7,7 @@
             android:label="@string/markdown_text_editor_app_name"
             android:theme="@style/MarkdownTextEditor.AppTheme"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
