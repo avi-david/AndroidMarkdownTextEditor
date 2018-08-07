@@ -30,16 +30,16 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (intent.hasExtra(EXTRA_STARTING_TEXT)) {
             startingText = intent.getStringExtra(EXTRA_STARTING_TEXT)
-            toolbarColor = intent.getIntExtra(EXTRA_TOOLBAR_COLOR, R.color.colorPrimary)
-            accentColor = intent.getIntExtra(EXTRA_ACCENT_COLOR, R.color.colorAccent)
+            toolbarColor = intent.getIntExtra(EXTRA_TOOLBAR_COLOR, ContextCompat.getColor(this, R.color.colorPrimary))
+            accentColor = intent.getIntExtra(EXTRA_ACCENT_COLOR, ContextCompat.getColor(this, R.color.colorAccent))
         }
         if (savedInstanceState?.containsKey(EXTRA_STARTING_TEXT) == true) {
             startingText = savedInstanceState.getString(EXTRA_STARTING_TEXT, "")
-            toolbarColor = savedInstanceState.getInt(EXTRA_TOOLBAR_COLOR, R.color.colorPrimary)
-            accentColor = savedInstanceState.getInt(EXTRA_ACCENT_COLOR, R.color.colorAccent)
+            toolbarColor = savedInstanceState.getInt(EXTRA_TOOLBAR_COLOR, ContextCompat.getColor(this, R.color.colorPrimary))
+            accentColor = savedInstanceState.getInt(EXTRA_ACCENT_COLOR, ContextCompat.getColor(this, R.color.colorAccent))
         }
         setContentView(R.layout.activity_rich_text_editor)
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, toolbarColor)))
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(toolbarColor))
         etPrimaryEditor.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 p0?.let {
@@ -171,7 +171,7 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
 
     private fun toggleControlButton(button: ImageButton, isNowOn: Boolean) {
         if (isNowOn) {
-            button.setBackgroundColor(ContextCompat.getColor(this, accentColor))
+            button.setBackgroundColor(accentColor)
         } else {
             val attrs = intArrayOf(R.attr.selectableItemBackground)
             val typedArray = obtainStyledAttributes(attrs)
