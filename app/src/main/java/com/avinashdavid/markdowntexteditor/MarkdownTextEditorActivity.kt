@@ -1,7 +1,10 @@
 package com.avinashdavid.markdowntexteditor
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_rich_text_editor.*
 import ru.noties.markwon.Markwon
 
 class MarkdownTextEditorActivity : AppCompatActivity() {
+    private var startingText = ""
     private var currentNumberedListIndex = -1
     private var isNumberedListOn = false
     private var isBulletListOn = false
@@ -19,6 +23,12 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (intent.hasExtra(EXTRA_STARTING_TEXT)) {
+            startingText = intent.getStringExtra(EXTRA_STARTING_TEXT)
+        }
+        if (savedInstanceState?.containsKey(EXTRA_STARTING_TEXT) == true) {
+            startingText = savedInstanceState.getString(EXTRA_STARTING_TEXT, "")
+        }
         setContentView(R.layout.activity_rich_text_editor)
         etPrimaryEditor.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -105,6 +115,12 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
             toggleControlButton(btQuote, isQuoteOn)
             toggleControlButton(btNumberedList, isNumberedListOn)
         }
+        etPrimaryEditor.setText(startingText)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putString(EXTRA_STARTING_TEXT, etPrimaryEditor.text.toString())
+        super.onSaveInstanceState(outState)
     }
 
     private fun insertBulletListItem() {
@@ -133,6 +149,29 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
             val backgroundResource = typedArray.getResourceId(0, 0)
             button.setBackgroundResource(backgroundResource)
             typedArray.recycle()
+        }
+    }
+
+    companion object {
+        private const val EXTRA_STARTING_TEXT = "EXTRA_STARTING_TEXT"
+        const val KEY_RESULT_EXTRA_FINAL_TEXT = "KEY_RESULT_EXTRA_FINAL_TEXT"
+        const val REQUEST_CODE_MARKDOWN_TEXT_EDITOR: Int = 8921072
+        const val RESULT_CODE_EDITING_COMPLETED = Activity.RESULT_OK
+
+        fun startForResult(activity: AppCompatActivity, startingMarkdownText: String? = null) {
+            activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
+                startingMarkdownText?.let {
+                    putExtra(EXTRA_STARTING_TEXT, it)
+                }
+            }, REQUEST_CODE_MARKDOWN_TEXT_EDITOR)
+        }
+
+        fun startForResult(activity: Activity, startingMarkdownText: String? = null) {
+            activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
+                startingMarkdownText?.let {
+                    putExtra(EXTRA_STARTING_TEXT, it)
+                }
+            }, REQUEST_CODE_MARKDOWN_TEXT_EDITOR)
         }
     }
 }
