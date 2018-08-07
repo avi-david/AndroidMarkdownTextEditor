@@ -1,17 +1,16 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'android-maven'
 
 group='com.github.avi-david'
 
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.avinashdavid.richtexteditor"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
