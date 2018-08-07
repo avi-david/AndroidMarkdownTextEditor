@@ -173,7 +173,7 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
 
         const val RESULT_EXTRA_FINAL_TEXT = "RESULT_EXTRA_FINAL_TEXT"
         const val RESULT_CODE_EDITING_COMPLETED = Activity.RESULT_OK
-        const val REQUEST_CODE_MARKDOWN_TEXT_EDITOR: Int = 8921072
+        const val REQUEST_CODE_MARKDOWN_TEXT_EDITOR: Int = 62371
 
         fun startForResult(activity: AppCompatActivity, startingMarkdownText: String? = null) {
             activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
