@@ -43,6 +43,7 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
 //            accentColor = savedInstanceState.getInt(EXTRA_ACCENT_COLOR, ContextCompat.getColor(this, R.color.colorAccent))
         }
         setContentView(R.layout.activity_rich_text_editor)
+        setSupportActionBar(toolbar)
 //        supportActionBar?.setBackgroundDrawable(ColorDrawable(toolbarColor))
         etPrimaryEditor.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -187,37 +188,23 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_STARTING_TEXT = "EXTRA_STARTING_TEXT"
-        private const val EXTRA_TOOLBAR_COLOR = "EXTRA_TOOLBAR_COLOR"
-        private const val EXTRA_ACCENT_COLOR = "EXTRA_ACCENT_COLOR"
 
         const val RESULT_EXTRA_FINAL_TEXT = "RESULT_EXTRA_FINAL_TEXT"
         const val RESULT_CODE_EDITING_COMPLETED = Activity.RESULT_OK
         const val REQUEST_CODE_MARKDOWN_TEXT_EDITOR: Int = 62371
 
-        fun startForResult(activity: AppCompatActivity, startingMarkdownText: String? = null, toolbarColor: Int? = null, accentColor: Int? = null) {
+        fun startForResult(activity: AppCompatActivity, startingMarkdownText: String? = null) {
             activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
                 startingMarkdownText?.let {
                     putExtra(EXTRA_STARTING_TEXT, it)
-                }
-                toolbarColor?.let {
-                    putExtra(EXTRA_TOOLBAR_COLOR, it)
-                }
-                accentColor?.let {
-                    putExtra(EXTRA_ACCENT_COLOR, it)
                 }
             }, REQUEST_CODE_MARKDOWN_TEXT_EDITOR)
         }
 
-        fun startForResult(activity: Activity, startingMarkdownText: String? = null, toolbarColor: Int? = null, accentColor: Int? = null) {
+        fun startForResult(activity: Activity, startingMarkdownText: String? = null) {
             activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
                 startingMarkdownText?.let {
                     putExtra(EXTRA_STARTING_TEXT, it)
-                }
-                toolbarColor?.let {
-                    putExtra(EXTRA_TOOLBAR_COLOR, it)
-                }
-                accentColor?.let {
-                    putExtra(EXTRA_ACCENT_COLOR, it)
                 }
             }, REQUEST_CODE_MARKDOWN_TEXT_EDITOR)
         }
