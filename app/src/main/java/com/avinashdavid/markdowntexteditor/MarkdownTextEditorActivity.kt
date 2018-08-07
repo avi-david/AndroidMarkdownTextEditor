@@ -15,8 +15,14 @@ import android.widget.EditText
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.activity_rich_text_editor.*
 import ru.noties.markwon.Markwon
+import android.R.attr.data
+import android.content.Context
+import android.content.res.TypedArray
+import android.util.TypedValue
 
-class MarkdownTextEditorActivity : AppCompatActivity() {
+
+
+open class MarkdownTextEditorActivity : AppCompatActivity() {
     private var startingText = ""
 
     private var currentNumberedListIndex = -1
@@ -169,7 +175,7 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
 
     private fun toggleControlButton(button: ImageButton, isNowOn: Boolean) {
         if (isNowOn) {
-            button.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+            button.setBackgroundColor(ContextCompat.getColor(this, fetchAccentColor(this)))
         } else {
             val attrs = intArrayOf(R.attr.selectableItemBackground)
             val typedArray = obtainStyledAttributes(attrs)
@@ -214,6 +220,17 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
                     putExtra(EXTRA_ACCENT_COLOR, it)
                 }
             }, REQUEST_CODE_MARKDOWN_TEXT_EDITOR)
+        }
+
+        private fun fetchAccentColor(context: Context): Int {
+            val typedValue = TypedValue()
+
+            val a = context.obtainStyledAttributes(typedValue.data, intArrayOf(R.attr.colorAccent))
+            val color = a.getColor(0, 0)
+
+            a.recycle()
+
+            return color
         }
     }
 }
