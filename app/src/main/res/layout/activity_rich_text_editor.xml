@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:hint="@string/enter_text"
+            android:hint="@string/markdown_text_editor_enter_text"
             android:inputType="textMultiLine"
             android:gravity="top"/>
 

@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Rich Text Editor</string>
-    <string name="enter_text">Enter Text</string>
+    <string name="markdown_text_editor_app_name">Rich Text Editor</string>
+    <string name="markdown_text_editor_enter_text">Enter Text</string>
+    <string name="markdown_text_editor_done">Done</string>
 </resources>

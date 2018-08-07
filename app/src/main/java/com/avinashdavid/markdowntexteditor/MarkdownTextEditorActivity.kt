@@ -4,10 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
@@ -152,11 +153,27 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_markdown_text_editor, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.miMarkdownTextEditorDone -> {
+                setResult(RESULT_CODE_EDITING_COMPLETED, Intent().putExtra(RESULT_EXTRA_FINAL_TEXT, etPrimaryEditor.text.toString()))
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     companion object {
         private const val EXTRA_STARTING_TEXT = "EXTRA_STARTING_TEXT"
-        const val KEY_RESULT_EXTRA_FINAL_TEXT = "KEY_RESULT_EXTRA_FINAL_TEXT"
-        const val REQUEST_CODE_MARKDOWN_TEXT_EDITOR: Int = 8921072
+
+        const val RESULT_EXTRA_FINAL_TEXT = "RESULT_EXTRA_FINAL_TEXT"
         const val RESULT_CODE_EDITING_COMPLETED = Activity.RESULT_OK
+        const val REQUEST_CODE_MARKDOWN_TEXT_EDITOR: Int = 8921072
 
         fun startForResult(activity: AppCompatActivity, startingMarkdownText: String? = null) {
             activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
