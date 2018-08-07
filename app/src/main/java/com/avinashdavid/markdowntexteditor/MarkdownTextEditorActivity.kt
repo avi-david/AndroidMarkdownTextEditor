@@ -200,20 +200,49 @@ private fun EditText.addListItemWithListMarker(listMarker: String) {
     val currentSelectionStart = selectionStart
     val currentSelectionEnd = selectionEnd
     val currentText = this.text.toString()
+    var selectionToSet = 0
     if (currentSelectionEnd != currentSelectionStart) {
         val preString = currentText.substring(0, currentSelectionStart)
         val stringToPutInList = currentText.substring(currentSelectionStart, currentSelectionEnd)
         val postString = currentText.substring(currentSelectionEnd)
-        val stringToInsert = "$preString $lineBreak $listMarker $stringToPutInList $lineBreak $postString"
+        val stringToInsert = if (preString.count() == 0) {
+            if (postString.count() == 0) {
+                "$listMarker $stringToPutInList"
+            } else {
+                "$listMarker $stringToPutInList $lineBreak $postString"
+            }
+        } else {
+            if (postString.count() == 0) {
+                "$preString $lineBreak $listMarker $stringToPutInList"
+            } else {
+                "$preString $lineBreak $listMarker $stringToPutInList $lineBreak $postString"
+            }
+        }
         setText(stringToInsert)
+        selectionToSet = if (preString.count() == 0) {
+            "$listMarker $stringToPutInList ".count()
+        } else {
+            "$preString $lineBreak $listMarker $stringToPutInList ".count()
+        }
     } else {
         val stringToInsert = if (currentText.count() > 0) {
-            "$currentText $lineBreak $listMarker "
+            val prestring = currentText.substring(0, currentSelectionEnd)
+            val postString = currentText.substring(currentSelectionEnd)
+            val fullString = "$prestring $lineBreak $listMarker "
+            selectionToSet = fullString.length
+            if (postString.count() > 0) {
+                "$fullString $lineBreak $postString"
+            } else {
+                fullString
+            }
         } else {
+            selectionToSet = listMarker.count() + 1
             "$listMarker "
         }
         setText(stringToInsert)
-        setSelection(stringToInsert.length)
+    }
+    try { setSelection(selectionToSet) } catch (e: Exception) {
+        setSelection(this.text.length)
     }
 }
 
