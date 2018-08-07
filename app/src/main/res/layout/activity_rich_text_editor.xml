@@ -23,9 +23,11 @@
             android:layout_weight="1"
             android:hint="@string/enter_text"
             android:inputType="textMultiLine"
-            android:gravity="top" />
+            android:gravity="top"
+            android:imeOptions="actionUnspecified"/>
 
         <ScrollView
+            android:id="@+id/scrollViewPreview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

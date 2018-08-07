@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
+import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_rich_text_editor.*
 import ru.noties.markwon.Markwon
@@ -17,6 +20,7 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {
                 p0?.let {
                     Markwon.setMarkdown(this@MarkdownTextEditorActivity.tvTextPreview, it.toString())
+                    this@MarkdownTextEditorActivity.scrollViewPreview.fullScroll(View.FOCUS_DOWN)
                 }
             }
 
@@ -24,8 +28,9 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
 
             }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p0 == "\n") {
+            override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
+                val text = try { p0?.substring(start, start+count) } catch (e: Exception) {""}
+                if (text == "\n") {
                     currentNumberedListIndex = -1
                 }
             }
@@ -58,6 +63,20 @@ class MarkdownTextEditorActivity : AppCompatActivity() {
                 currentNumberedListIndex ++
             }
             etPrimaryEditor.addNumberedListItem(currentNumberedListIndex)
+        }
+        etPrimaryEditor.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
+                    || actionId == EditorInfo.IME_ACTION_DONE
+                    || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                    && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                if (currentNumberedListIndex == -1) {
+                    currentNumberedListIndex = 1
+                } else {
+                    currentNumberedListIndex ++
+                }
+                true
+            }
+            false
         }
     }
 }
