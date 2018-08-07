@@ -25,6 +25,13 @@
             android:inputType="textMultiLine"
             android:gravity="top"/>
 
+        <TextView
+            android:text="@string/markdown_text_editor_preview"
+            style="@style/TextAppearance.AppCompat.Widget.Switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
         <ScrollView
             android:id="@+id/scrollViewPreview"
             android:layout_width="match_parent"
