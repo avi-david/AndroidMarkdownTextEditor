@@ -59,6 +59,24 @@ open class MarkdownTextEditorFragment : Fragment() {
                         insertQuoteLine()
                     }
                 }
+                fragmentView?.etPrimaryEditor?.let {
+                    if (isBulletListOn) {
+                        if (!checkIfFirstCharSetInCurrentLineIs(it, "* ")) {
+                            isBulletListOn = false
+                            toggleControlButton(btBulletList, isBulletListOn)
+                        }
+                    } else if (isNumberedListOn) {
+                        if (!checkIfFirstCharSetInCurrentLineIs(it, currentNumberedListIndex.toString() + ". ")) {
+                            isNumberedListOn = false
+                            toggleControlButton(btNumberedList, isNumberedListOn)
+                        }
+                    } else if (isQuoteOn) {
+                        if (!checkIfFirstCharSetInCurrentLineIs(it, "> ")) {
+                            isQuoteOn = false
+                            toggleControlButton(btQuote, isQuoteOn)
+                        }
+                    }
+                }
             }
         })
         fragmentView?.btBold?.setOnClickListener {
@@ -210,6 +228,26 @@ open class MarkdownTextEditorFragment : Fragment() {
                 typedArray.recycle()
             }
         }
+    }
+
+    private fun checkIfFirstCharSetInCurrentLineIs(editText: EditText, charSet: String) : Boolean {
+        if (editText.text.isEmpty()) {
+            return false
+        }
+        var currentSelectionEnd = editText.selectionEnd
+        if (currentSelectionEnd < 0) {
+            currentSelectionEnd = 0
+        }
+        var indexOfLastNewLineBeforeSelectionEnd = editText.text.toString().lastIndexOf("\n", currentSelectionEnd) + 1
+        if (indexOfLastNewLineBeforeSelectionEnd < 0) {
+            indexOfLastNewLineBeforeSelectionEnd = 0
+        }
+        val substringAtBeginningOfCurrentLineWithSameLengthAsProvidedCharSet = try {
+            editText.text.substring(indexOfLastNewLineBeforeSelectionEnd)
+        } catch (e: Exception) {
+            ""
+        }
+        return substringAtBeginningOfCurrentLineWithSameLengthAsProvidedCharSet.startsWith(charSet)
     }
 
     interface IMarkdownTextEditorListener {
