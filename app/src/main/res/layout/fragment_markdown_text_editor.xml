@@ -114,6 +114,13 @@
                 android:src="@drawable/ic_format_list_numbered_black_24dp"
                 style="@style/MarkdownTextEditor.FormatButton"/>
 
+            <ImageButton
+                android:id="@+id/btIndentIncrease"
+                android:layout_width="@dimen/width_markdown_format_button"
+                android:layout_height="@dimen/height_markdown_format_button"
+                android:src="@drawable/ic_keyboard_tab_black_24dp"
+                style="@style/MarkdownTextEditor.FormatButton"/>
+
         </LinearLayout>
     </HorizontalScrollView>
 

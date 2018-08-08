@@ -130,6 +130,9 @@ open class MarkdownTextEditorFragment : Fragment() {
             toggleControlButton(btQuote, isQuoteOn)
             toggleControlButton(btNumberedList, isNumberedListOn)
         }
+        fragmentView?.btIndentIncrease?.setOnClickListener {
+            fragmentView?.etPrimaryEditor?.addIndent()
+        }
         startingText?.let {
             fragmentView?.etPrimaryEditor?.setText(it)
         }
@@ -300,6 +303,35 @@ internal fun EditText.addLink() {
     val postString = currentText.substring(currentSelectionEnd)
     val fullString = "$prestring [LABEL](link) $postString"
     this.setText(fullString)
+}
+
+internal fun EditText.addIndent() {
+    val currentSelectionStart = selectionStart
+    val preString = text.toString().substring(0, currentSelectionStart)
+    val postString = text.toString().substring(currentSelectionStart)
+    setText("$preString&nbsp;$postString")
+    setSelection("$preString&nbsp;".count())
+}
+
+internal fun EditText.removeMostImmediatelyPreviousIndent() {
+    val currentSelectionEnd = selectionEnd
+    var newSelection = selectionEnd
+    val currentTextEndingAtSelectionEnd = text.toString().substring(0, currentSelectionEnd)
+    val postString = text.toString().substring(currentSelectionEnd)
+    val modifiedPreString = if (currentTextEndingAtSelectionEnd.lastIndexOf("&nbsp;") >= 0) {
+        val preSubString = currentTextEndingAtSelectionEnd.substring(0, currentTextEndingAtSelectionEnd.lastIndexOf("&nbsp;"))
+        val postSubString = currentTextEndingAtSelectionEnd.substring(currentTextEndingAtSelectionEnd.lastIndexOf("&nbsp;") + "&nbsp;".count())
+        newSelection -= "&nbsp;".count()
+        preSubString + postSubString
+    } else {
+        currentTextEndingAtSelectionEnd
+    }
+    setText("$modifiedPreString$postString")
+    try {
+        setSelection(newSelection)
+    } catch (e: Exception) {
+
+    }
 }
 
 internal fun EditText.addListItemWithListMarker(listMarker: String) {
