@@ -133,6 +133,11 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
         etPrimaryEditor.setText(startingText)
     }
 
+    override fun onStart() {
+        super.onStart()
+        startActivity(Intent(this, TestActivity::class.java))
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         outState?.apply {
             putString(EXTRA_STARTING_TEXT, etPrimaryEditor.text.toString())

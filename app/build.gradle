@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
@@ -6,11 +6,12 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'android-maven'
 
-group='com.github.avi-david'
+group = 'com.github.avi-david'
 
 android {
     compileSdkVersion 28
     defaultConfig {
+        applicationId "com.avinashdavid.richtexteditor"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -27,7 +28,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0-beta01'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'ru.noties:markwon:1.0.3'
