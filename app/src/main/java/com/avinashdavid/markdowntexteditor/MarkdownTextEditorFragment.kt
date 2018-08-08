@@ -213,6 +213,14 @@ open class MarkdownTextEditorFragment : Fragment() {
 
         private var currentMarkdownTextEditorListener: IMarkdownTextEditorListener? = null
 
+        /**
+         * IMPORTANT: Please remember to call setMarkdownTextListener in your onCreate(savedInstanceState: Bundle?) in order to restore the interface instance for the editor fragment.
+         * This allows for more flexible usage of this fragment, by allowing it to be launched and used directly from other fragments
+         * @param markdownTextEditorListener An interface instance
+         * @param startingText The initial markdown text in the editor fragment
+         * @return A correctly initialized MarkdownTextEditorFragment
+         */
+        @JvmStatic
         fun newInstance(markdownTextEditorListener: IMarkdownTextEditorListener, startingText: String?) : MarkdownTextEditorFragment {
             currentMarkdownTextEditorListener = markdownTextEditorListener
             return MarkdownTextEditorFragment().apply {
