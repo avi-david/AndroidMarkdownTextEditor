@@ -1,0 +1,48 @@
+diff --git a/app/build.gradle b/app/build.gradle
+index 706b76d..b3084e0 100644
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -1,4 +1,4 @@
+-apply plugin: 'com.android.library'
++apply plugin: 'com.android.application'
+ 
+ apply plugin: 'kotlin-android'
+ 
+@@ -11,7 +11,7 @@ group = 'com.github.avi-david'
+ android {
+     compileSdkVersion 28
+     defaultConfig {
+-//        applicationId "com.avinashdavid.richtexteditor"
++        applicationId "com.avinashdavid.richtexteditor"
+         minSdkVersion 19
+         targetSdkVersion 28
+         versionCode 1
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index ddc2c36..596fa7d 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -2,8 +2,21 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     package="com.avinashdavid.markdowntexteditor">
+ 
+-    <application>
+-        
++    <application
++        android:allowBackup="true"
++        android:icon="@mipmap/ic_launcher"
++        android:label="@string/markdown_text_editor_app_name"
++        android:roundIcon="@mipmap/ic_launcher_round"
++        android:supportsRtl="true"
++        android:theme="@style/MarkdownTextEditor.AppTheme">
++        <activity android:name=".TestActivity"
++            android:windowSoftInputMode="adjustResize">
++            <intent-filter>
++                <action android:name="android.intent.action.MAIN" />
++
++                <category android:name="android.intent.category.LAUNCHER" />
++            </intent-filter>
++        </activity>
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
