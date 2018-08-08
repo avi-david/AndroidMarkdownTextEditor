@@ -62,19 +62,22 @@ open class MarkdownTextEditorFragment : Fragment() {
             }
         })
         fragmentView?.btBold?.setOnClickListener {
-            etPrimaryEditor.addBold()
+            fragmentView?.etPrimaryEditor?.addBold()
         }
         fragmentView?.btItalic?.setOnClickListener {
-            etPrimaryEditor.addItalic()
+            fragmentView?.etPrimaryEditor?.addItalic()
         }
         fragmentView?.btQuote?.setOnClickListener {
             if (!isQuoteOn) {
                 currentNumberedListIndex = -1
                 isQuoteOn = true
+                if (fragmentView?.etPrimaryEditor?.text?.count() ?: 0 > 0) {
+                    fragmentView?.etPrimaryEditor?.insertDoubleNewLine()
+                }
                 insertQuoteLine()
             } else {
                 isQuoteOn = false
-                etPrimaryEditor.insertMarkdownNewline()
+                fragmentView?.etPrimaryEditor?.insertDoubleNewLine()
             }
             isNumberedListOn = false
             toggleControlButton(btNumberedList, isNumberedListOn)
@@ -83,22 +86,25 @@ open class MarkdownTextEditorFragment : Fragment() {
             toggleControlButton(btQuote, isQuoteOn)
         }
         fragmentView?.btStrikethrough?.setOnClickListener {
-            etPrimaryEditor.addStrikethrough()
+            fragmentView?.etPrimaryEditor?.addStrikethrough()
         }
         fragmentView?.btCode?.setOnClickListener {
-            etPrimaryEditor.addCode()
+            fragmentView?.etPrimaryEditor?.addCode()
         }
         fragmentView?.btLink?.setOnClickListener {
-            etPrimaryEditor.addLink()
+            fragmentView?.etPrimaryEditor?.addLink()
         }
         fragmentView?.btBulletList?.setOnClickListener {
             if (!isBulletListOn) {
                 currentNumberedListIndex = -1
                 isBulletListOn = true
+                if (fragmentView?.etPrimaryEditor?.text?.count() ?: 0 > 0) {
+                    fragmentView?.etPrimaryEditor?.insertDoubleNewLine()
+                }
                 insertBulletListItem()
             } else {
                 isBulletListOn = false
-                etPrimaryEditor.insertMarkdownNewline()
+                fragmentView?.etPrimaryEditor?.insertDoubleNewLine()
             }
             isNumberedListOn = false
             toggleControlButton(btNumberedList, isNumberedListOn)
@@ -109,11 +115,14 @@ open class MarkdownTextEditorFragment : Fragment() {
         fragmentView?.btNumberedList?.setOnClickListener {
             if (!isNumberedListOn) {
                 isNumberedListOn = true
+                if (fragmentView?.etPrimaryEditor?.text?.count() ?: 0 > 0) {
+                    fragmentView?.etPrimaryEditor?.insertDoubleNewLine()
+                }
                 insertNumberedListItem()
             } else {
                 isNumberedListOn = false
                 currentNumberedListIndex = -1
-                etPrimaryEditor.insertMarkdownNewline()
+                fragmentView?.etPrimaryEditor?.insertDoubleNewLine()
             }
             isBulletListOn = false
             toggleControlButton(btBulletList, isBulletListOn)
@@ -382,7 +391,12 @@ internal fun EditText.addNumberedListItem(numberValue: Int) {
 
 internal const val doubleLineBreak = "\n\n"
 
-internal fun EditText.insertMarkdownNewline() {
+internal fun EditText.insertDoubleNewLine() {
     setText(text.toString() + doubleLineBreak)
+    setSelection(this.text.length)
+}
+
+internal fun EditText.insertSingleNewLine() {
+    setText(text.toString() + "\n")
     setSelection(this.text.length)
 }

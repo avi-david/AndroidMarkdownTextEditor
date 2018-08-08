@@ -83,7 +83,7 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
                 insertQuoteLine()
             } else {
                 isQuoteOn = false
-                etPrimaryEditor.insertMarkdownNewline()
+                etPrimaryEditor.insertDoubleNewLine()
             }
             isNumberedListOn = false
             toggleControlButton(btNumberedList, isNumberedListOn)
@@ -107,7 +107,7 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
                 insertBulletListItem()
             } else {
                 isBulletListOn = false
-                etPrimaryEditor.insertMarkdownNewline()
+                etPrimaryEditor.insertDoubleNewLine()
             }
             isNumberedListOn = false
             toggleControlButton(btNumberedList, isNumberedListOn)
@@ -122,7 +122,7 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
             } else {
                 isNumberedListOn = false
                 currentNumberedListIndex = -1
-                etPrimaryEditor.insertMarkdownNewline()
+                etPrimaryEditor.insertDoubleNewLine()
             }
             isBulletListOn = false
             toggleControlButton(btBulletList, isBulletListOn)
