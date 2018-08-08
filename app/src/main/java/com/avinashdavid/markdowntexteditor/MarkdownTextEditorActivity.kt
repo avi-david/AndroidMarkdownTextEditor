@@ -193,6 +193,15 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
         const val RESULT_CODE_EDITING_COMPLETED = Activity.RESULT_OK
         const val REQUEST_CODE_MARKDOWN_TEXT_EDITOR: Int = 62371
 
+        /**
+         * When the user finishes editing and confirms final text, the final text will be sent back via result
+         * with requestCode: REQUEST_CODE_MARKDOWN_TEXT_EDITOR
+         * with result: RESULT_CODE_EDITING_COMPLETED
+         * and an intent with string extra: RESULT_EXTRA_FINAL_TEXT
+         * @param activity An AppCompatActivity
+         * @param startingMarkdownText The initial text
+         */
+        @JvmStatic
         fun startForResult(activity: AppCompatActivity, startingMarkdownText: String? = null) {
             activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
                 startingMarkdownText?.let {
@@ -201,6 +210,15 @@ open class MarkdownTextEditorActivity : AppCompatActivity() {
             }, REQUEST_CODE_MARKDOWN_TEXT_EDITOR)
         }
 
+        /**
+         * When the user finishes editing and confirms final text, the final text will be sent back via result
+         * with requestCode: REQUEST_CODE_MARKDOWN_TEXT_EDITOR
+         * with result: RESULT_CODE_EDITING_COMPLETED
+         * and an intent with string extra: RESULT_EXTRA_FINAL_TEXT
+         * @param activity An Activity
+         * @param startingMarkdownText The initial text
+         */
+        @JvmStatic
         fun startForResult(activity: Activity, startingMarkdownText: String? = null) {
             activity.startActivityForResult(Intent(activity, MarkdownTextEditorActivity::class.java).apply {
                 startingMarkdownText?.let {
