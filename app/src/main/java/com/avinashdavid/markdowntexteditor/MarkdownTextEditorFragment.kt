@@ -28,6 +28,7 @@ open class MarkdownTextEditorFragment : Fragment() {
                 getPropertiesFromBundle(it)
             }
         }
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -134,9 +135,35 @@ open class MarkdownTextEditorFragment : Fragment() {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.miMarkdownTextEditorDone -> {
+                fragmentView?.etPrimaryEditor?.text?.toString()?.let {
+                    try {
+                        currentMarkdownTextEditorListener?.onMarkdownTextEditingCompleted(it)
+                        activity?.let {
+                            it.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+                        }
+                    } catch (e: Exception) {
+
+                    }
+                    //TODO: remove from fragment backstack
+                }
+                true
+            }
+            else -> {
+                false
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_markdown_text_editor, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    fun setMarkdownTextListener(markdownTextEditorListener: IMarkdownTextEditorListener) {
+        currentMarkdownTextEditorListener = markdownTextEditorListener
     }
 
     private fun getPropertiesFromBundle(bundle: Bundle) {
@@ -176,26 +203,12 @@ open class MarkdownTextEditorFragment : Fragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.miMarkdownTextEditorDone -> {
-                fragmentView?.etPrimaryEditor?.text?.toString()?.let {
-                    currentMarkdownTextEditorListener?.onMarkdownTextEditingCompleted(it)
-                    //TODO: remove from fragment backstack
-                }
-                true
-            }
-            else -> {
-                false
-            }
-        }
-    }
-
     interface IMarkdownTextEditorListener {
         fun onMarkdownTextEditingCompleted(markdown: String)
     }
 
     companion object {
+        const val FRAGMENT_TAG = "MarkdownTextEditorFragment"
         const val ARG_STARTING_TEXT = "ARG_STARTING_TEXT"
 
         private var currentMarkdownTextEditorListener: IMarkdownTextEditorListener? = null
