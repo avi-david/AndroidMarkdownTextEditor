@@ -298,37 +298,62 @@ private fun EditText.addListItemWithListMarker(listMarker: String) {
     val currentSelectionEnd = selectionEnd
     val currentText = this.text.toString()
     var selectionToSet = 0
+    val lineBreak = "\n"
     if (currentSelectionEnd != currentSelectionStart) {
         val preString = currentText.substring(0, currentSelectionStart)
         val stringToPutInList = currentText.substring(currentSelectionStart, currentSelectionEnd)
         val postString = currentText.substring(currentSelectionEnd)
         val stringToInsert = if (preString.count() == 0) {
+            selectionToSet = "$listMarker $stringToPutInList".count()
             if (postString.count() == 0) {
                 "$listMarker $stringToPutInList"
             } else {
-                "$listMarker $stringToPutInList $lineBreak $postString"
+                if (stringToPutInList.endsWith("\n")) {
+                    "$listMarker $stringToPutInList$postString"
+                } else {
+                    "$listMarker $stringToPutInList $lineBreak$postString"
+                }
             }
         } else {
             if (postString.count() == 0) {
-                "$preString $lineBreak $listMarker $stringToPutInList"
+                if (preString.endsWith("\n")) {
+                    selectionToSet = "$preString$listMarker $stringToPutInList".count()
+                    "$preString$listMarker $stringToPutInList"
+                } else {
+                    selectionToSet = "$preString $lineBreak$listMarker $stringToPutInList".count()
+                    "$preString $lineBreak$listMarker $stringToPutInList"
+                }
             } else {
-                "$preString $lineBreak $listMarker $stringToPutInList $lineBreak $postString"
+                if (preString.endsWith("\n")) {
+                    selectionToSet = "$preString$listMarker $stringToPutInList".count()
+                    if (stringToPutInList.endsWith("\n")) {
+                        "$preString$listMarker $stringToPutInList$postString"
+                    } else {
+                        "$preString$listMarker $stringToPutInList $lineBreak$postString"
+                    }
+                } else {
+                    selectionToSet = "$preString $lineBreak$listMarker $stringToPutInList".count()
+                    if (stringToPutInList.endsWith("\n")) {
+                        "$preString $lineBreak$listMarker $stringToPutInList$postString"
+                    } else {
+                        "$preString $lineBreak$listMarker $stringToPutInList $lineBreak$postString"
+                    }
+                }
             }
         }
         setText(stringToInsert)
-        selectionToSet = if (preString.count() == 0) {
-            "$listMarker $stringToPutInList ".count()
-        } else {
-            "$preString $lineBreak $listMarker $stringToPutInList ".count()
-        }
     } else {
         val stringToInsert = if (currentText.count() > 0) {
             val prestring = currentText.substring(0, currentSelectionEnd)
             val postString = currentText.substring(currentSelectionEnd)
-            val fullString = "$prestring $lineBreak $listMarker "
+            val fullString = if (!currentText.endsWith("\n")) {
+                "$prestring $lineBreak$listMarker "
+            } else {
+                "$prestring$listMarker "
+            }
             selectionToSet = fullString.length
             if (postString.count() > 0) {
-                "$fullString $lineBreak $postString"
+                "$fullString $lineBreak$postString"
             } else {
                 fullString
             }
@@ -355,9 +380,9 @@ private fun EditText.addNumberedListItem(numberValue: Int) {
     addListItemWithListMarker(numberValue.toString() + ".")
 }
 
-private const val lineBreak = "\n\n"
+private const val doubleLineBreak = "\n\n"
 
 private fun EditText.insertMarkdownNewline() {
-    setText(text.toString() + lineBreak)
+    setText(text.toString() + doubleLineBreak)
     setSelection(this.text.length)
 }
