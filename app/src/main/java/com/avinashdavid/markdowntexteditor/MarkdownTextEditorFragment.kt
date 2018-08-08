@@ -234,7 +234,7 @@ open class MarkdownTextEditorFragment : Fragment() {
     }
 }
 
-private fun insertMarkdownInString(string: String, markdown: String, insertAtPosition: Int) : String {
+internal fun insertMarkdownInString(string: String, markdown: String, insertAtPosition: Int) : String {
     val prestring = string.substring(0, insertAtPosition)
     val postString = try {
         string.substring(insertAtPosition)
@@ -244,14 +244,14 @@ private fun insertMarkdownInString(string: String, markdown: String, insertAtPos
     return "$prestring$markdown$postString"
 }
 
-private fun wrapStringWithMarkdown(string: String, splitMarkdown: String, selectionStart: Int, selectionEnd: Int) : String {
+internal fun wrapStringWithMarkdown(string: String, splitMarkdown: String, selectionStart: Int, selectionEnd: Int) : String {
     val stringToWrap = string.substring(selectionStart, selectionEnd)
     val prestring = string.substring(0, selectionStart)
     val poststring = string.substring(selectionEnd)
     return "$prestring$splitMarkdown$stringToWrap$splitMarkdown$poststring"
 }
 
-private fun getFormattingMarkdown(string: String, splitMarkdown: String, selectionStart: Int, selectionEnd: Int) : String {
+internal fun getFormattingMarkdown(string: String, splitMarkdown: String, selectionStart: Int, selectionEnd: Int) : String {
     return if (selectionStart == selectionEnd) {
         insertMarkdownInString(string, splitMarkdown + splitMarkdown, selectionEnd)
     } else {
@@ -259,7 +259,7 @@ private fun getFormattingMarkdown(string: String, splitMarkdown: String, selecti
     }
 }
 
-private fun EditText.insertFormattingMarkdown(splitMarkdown: String) {
+internal fun EditText.insertFormattingMarkdown(splitMarkdown: String) {
     val currentSelectionStart = selectionStart
     val currentSelectionEnd = selectionEnd
     val currentText = this.text.toString()
@@ -268,23 +268,23 @@ private fun EditText.insertFormattingMarkdown(splitMarkdown: String) {
     setSelection(currentSelectionEnd + splitMarkdown.length)
 }
 
-private fun EditText.addBold() {
+internal fun EditText.addBold() {
     insertFormattingMarkdown("**")
 }
 
-private fun EditText.addItalic() {
+internal fun EditText.addItalic() {
     insertFormattingMarkdown("_")
 }
 
-private fun EditText.addStrikethrough() {
+internal fun EditText.addStrikethrough() {
     insertFormattingMarkdown("~~")
 }
 
-private fun EditText.addCode() {
+internal fun EditText.addCode() {
     insertFormattingMarkdown("`")
 }
 
-private fun EditText.addLink() {
+internal fun EditText.addLink() {
     val currentSelectionEnd = selectionEnd
     val currentText = this.text.toString()
     val prestring = currentText.substring(0, currentSelectionEnd)
@@ -293,7 +293,7 @@ private fun EditText.addLink() {
     this.setText(fullString)
 }
 
-private fun EditText.addListItemWithListMarker(listMarker: String) {
+internal fun EditText.addListItemWithListMarker(listMarker: String) {
     val currentSelectionStart = selectionStart
     val currentSelectionEnd = selectionEnd
     val currentText = this.text.toString()
@@ -368,21 +368,21 @@ private fun EditText.addListItemWithListMarker(listMarker: String) {
     }
 }
 
-private fun EditText.addQuote() {
+internal fun EditText.addQuote() {
     addListItemWithListMarker(">")
 }
 
-private fun EditText.addBulletListItem() {
+internal fun EditText.addBulletListItem() {
     addListItemWithListMarker("*")
 }
 
-private fun EditText.addNumberedListItem(numberValue: Int) {
+internal fun EditText.addNumberedListItem(numberValue: Int) {
     addListItemWithListMarker(numberValue.toString() + ".")
 }
 
-private const val doubleLineBreak = "\n\n"
+internal const val doubleLineBreak = "\n\n"
 
-private fun EditText.insertMarkdownNewline() {
+internal fun EditText.insertMarkdownNewline() {
     setText(text.toString() + doubleLineBreak)
     setSelection(this.text.length)
 }
