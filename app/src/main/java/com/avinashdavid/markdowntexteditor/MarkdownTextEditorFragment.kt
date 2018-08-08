@@ -298,7 +298,7 @@ internal fun EditText.addLink() {
     val currentText = this.text.toString()
     val prestring = currentText.substring(0, currentSelectionEnd)
     val postString = currentText.substring(currentSelectionEnd)
-    val fullString = "$prestring [Link Label Text](link address) $postString"
+    val fullString = "$prestring [LABEL](link) $postString"
     this.setText(fullString)
 }
 
