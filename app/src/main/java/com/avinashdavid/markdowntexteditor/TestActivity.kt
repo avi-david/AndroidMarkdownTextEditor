@@ -7,7 +7,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_test.*
 import ru.noties.markwon.Markwon
 
-class TestActivity : AppCompatActivity(), MarkdownTextEditorFragment.IMarkdownTextEditorListener {
+internal class TestActivity : AppCompatActivity(), MarkdownTextEditorFragment.IMarkdownTextEditorListener {
     override fun onMarkdownTextEditingCompleted(markdown: String) {
         etStartingText.setText(markdown)
         Markwon.setMarkdown(tvResultTextView, markdown)
