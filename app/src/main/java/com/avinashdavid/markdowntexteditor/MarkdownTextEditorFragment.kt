@@ -136,6 +136,43 @@ open class MarkdownTextEditorFragment : Fragment() {
         startingText?.let {
             fragmentView?.etPrimaryEditor?.setText(it)
         }
+        fragmentView?.btTitle1?.apply {
+            setOnLongClickListener {
+                if (fragmentView?.llTitleOptions?.visibility == View.VISIBLE) {
+                    fragmentView?.llTitleOptions?.visibility = View.GONE
+                } else {
+                    fragmentView?.llTitleOptions?.visibility = View.VISIBLE
+                }
+                true
+            }
+            setOnClickListener {
+                if (fragmentView?.llTitleOptions?.visibility == View.VISIBLE) {
+                    fragmentView?.llTitleOptions?.visibility = View.GONE
+                } else {
+                    fragmentView?.etPrimaryEditor?.addTitle(1)
+                }
+            }
+        }
+        fragmentView?.btTitle2?.setOnClickListener {
+            fragmentView?.etPrimaryEditor?.addTitle(2)
+            fragmentView?.llTitleOptions?.visibility = View.GONE
+        }
+        fragmentView?.btTitle3?.setOnClickListener {
+            fragmentView?.etPrimaryEditor?.addTitle(3)
+            fragmentView?.llTitleOptions?.visibility = View.GONE
+        }
+        fragmentView?.btTitle4?.setOnClickListener {
+            fragmentView?.etPrimaryEditor?.addTitle(4)
+            fragmentView?.llTitleOptions?.visibility = View.GONE
+        }
+        fragmentView?.btTitle5?.setOnClickListener {
+            fragmentView?.etPrimaryEditor?.addTitle(5)
+            fragmentView?.llTitleOptions?.visibility = View.GONE
+        }
+        fragmentView?.btTitle6?.setOnClickListener {
+            fragmentView?.etPrimaryEditor?.addTitle(6)
+            fragmentView?.llTitleOptions?.visibility = View.GONE
+        }
 
         return fragmentView
     }
@@ -419,6 +456,14 @@ internal fun EditText.addBulletListItem() {
 
 internal fun EditText.addNumberedListItem(numberValue: Int) {
     addListItemWithListMarker(numberValue.toString() + ".")
+}
+
+internal fun EditText.addTitle(titleNumber: Int) {
+    var listMarker = ""
+    for (i in 0 until titleNumber) {
+        listMarker += "#"
+    }
+    addListItemWithListMarker(listMarker)
 }
 
 internal const val doubleLineBreak = "\n\n"
