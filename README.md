@@ -19,7 +19,7 @@ To import this library, include Jitpack in your build script and project reposit
 
 Then add the project reference in your app dependencies
 
-`implementation 'com.github.avi-david:AndroidMarkdownTextEditor:0.0.9'`
+`implementation 'com.github.avi-david:AndroidMarkdownTextEditor:0.0.10'`
 
 ### Usage
 
