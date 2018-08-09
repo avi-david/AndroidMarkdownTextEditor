@@ -133,9 +133,6 @@ open class MarkdownTextEditorFragment : Fragment() {
         fragmentView?.btIndentIncrease?.setOnClickListener {
             fragmentView?.etPrimaryEditor?.addIndent()
         }
-        startingText?.let {
-            fragmentView?.etPrimaryEditor?.setText(it)
-        }
         fragmentView?.btTitle1?.apply {
             setOnLongClickListener {
                 if (fragmentView?.llTitleOptions?.visibility == View.VISIBLE) {
@@ -173,7 +170,11 @@ open class MarkdownTextEditorFragment : Fragment() {
             fragmentView?.etPrimaryEditor?.addTitle(6)
             fragmentView?.llTitleOptions?.visibility = View.GONE
         }
+        startingText?.let {
+            fragmentView?.etPrimaryEditor?.setText(it)
+        }
 
+        fragmentView?.etPrimaryEditor?.requestFocus()
         return fragmentView
     }
 
